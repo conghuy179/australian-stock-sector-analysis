@@ -1,0 +1,153 @@
+PROJECT TITLE: Australian Stock Sector Performance Analysis (2010–2020)
+By: Henry Phan
+
+--------------------------------------------------------
+RESEARCH QUESTION:
+Which stock sectors in the Australian market performed the best and worst between 2010 and 2020?
+
+--------------------------------------------------------
+EXECUTIVE SUMMARY:
+This project analyzes 100+ ASX-listed stocks from 2010 to 2020 to determine which sectors delivered the strongest and weakest performance. The analysis focuses on Compound Annual Growth Rate (CAGR) and volatility (standard deviation) at both stock and sector levels. The final output includes an interactive dashboard highlighting top and bottom sectors and enabling deeper stock-level exploration.
+--------------------------------------------------------
+TOOLS & TECHNOLOGIES USED:
+
+- **Python**: pandas, numpy, os – data cleaning, merging, CAGR calculations
+- **Power BI**: DAX, dashboard building, interactivity
+- **Jupyter Notebook**: for scripting and documentation
+- **CSV/Excel**: for raw and processed data handling
+
+--------------------------------------------------------
+ STEP-BY-STEP WORKFLOW:
+
+Step 1: DATA ACQUISITION
+- Downloaded 100 historical stock CSV files from Kaggle.
+- Each file represents a unique ASX-listed stock.
+- Source data includes columns: Date, Open, High, Low, Close, Adj Close, Volume.
+
+Step 2: DATA MERGING
+- Merged all files using Python (pandas + os).
+- Added a new column `Stock` from filenames for tracking.
+- Used a custom dictionary to map each stock to its `Sector`.
+- Resulting dataset shape: 432,888 rows* 8 columns.
+
+Step 3: INITIAL DATA FILTERING
+- Converted `Date` to datetime format.
+- Filtered data to include only the period from **2010-01-01 to 2020-04-01**.
+- Filtered dataset shape: 243,356 rows.
+
+Step 4: DATA QUALITY CHECKS
+- Identified and addressed missing and anomalous data:
+  • 521 rows had missing values in critical columns (Open, High, Low, Close, Adj Close, Volume).
+  • 639 rows had `Volume = 0` (non-trading days).
+- Decision:
+  ✔ Dropped all missing and zero-volume rows to ensure valid return and volatility calculations.
+  ✔ Outliers were retained, but flagged for potential impact (e.g. due to stock splits, illiquidity).
+
+Step 5: CLEANING COMPLETED
+- Final cleaned dataset: **242,196 rows**
+
+Step 6: STOCK-LEVEL PERFORMANCE CALCULATION
+- Data sorted by Date within each stock.
+- For each stock:
+  • Identified `start_price` and `end_price` using Adj Close.
+  • Calculated `Years` as (end_date - start_date) / 365.25
+  • Applied CAGR formula:
+      CAGR = (end_price / start_price) ** (1 / Years) - 1
+  • Stored: Stock, Sector, Start Date, End Date, Start/End Prices, Years, CAGR
+- Saved stock-level results as `stock_returns.csv`.
+
+Step 7: SECTOR-LEVEL AGGREGATION
+- Grouped by `Sector` and calculated:
+  • `mean` CAGR — indicates average annual return for each sector.
+  • `std` — measures volatility across stocks within the sector.
+  • `count` — number of stocks per sector (sample size).
+- Results saved to `sector_performance.csv`.
+
+--------------------------------------------------------
+📊 KEY FINDINGS:
+
+Top Performing Sector:
+- **Information Technology**
+  • Avg CAGR: **52.37%**
+  • Std Dev: 0.39 (highest volatility)
+  • Comment: Growth led by standout tech stocks like APT and XRO. High-risk, high-return profile.
+
+Bottom Performing Sector:
+- **Energy**
+  • Avg CAGR: **–4.52%**
+  • Comment: Only sector with negative growth, impacted by oil price volatility and energy transitions.
+
+Most Balanced Sectors:
+- **Healthcare (19.57%)**
+- **Communication Services (15.23%)**
+- **Utilities (12.82%)**
+  • Low volatility with moderate CAGR.
+  • Considered “defensive sectors” with steady growth across market cycles.
+
+Other Observations:
+- Consumer Staples had high growth (25.62%) but high volatility.
+- Financials underperformed despite high stock count, likely reflecting post-GFC recovery issues and interest rate pressure.
+
+--------------------------------------------------------
+ POWER BI DASHBOARD STRUCTURE:
+
+ **Sector Overview Page**
+- Top Sector Card
+- Overall Avg CAGR Card
+- Bar Chart: Avg CAGR by Sector
+- Column Chart: Stock Count by Sector
+
+ **Stock Drilldown Page** (In Progress)
+- Bar Chart: Top 10 Stocks by CAGR
+- Scatter Plot: CAGR vs Years (color-coded by Sector)
+- Stock Info Table with filtering and sorting
+
+ Planned Interactivity:
+- Slicers for Sector and Year Range
+- Drillthrough between pages
+- Dynamic tooltips (showing CAGR, start/end dates, etc.)
+
+--------------------------------------------------------
+ LIMITATIONS & ASSUMPTIONS:
+
+1. **Survivorship Bias**: Stocks that were delisted between 2010–2020 may be missing from Kaggle dataset.
+2. **Outlier Influence**: Sectors with only a few stocks (e.g., IT with 5 stocks) may have skewed CAGR due to standout performers.
+3. **Inflation Not Adjusted**: CAGR values represent nominal growth, not real (inflation-adjusted) growth.
+4. **No Dividend Inclusion**: Total returns do not include dividend yields, which are significant in sectors like Utilities or REITs.
+
+--------------------------------------------------------
+ FUTURE WORK (EXTENSIONS):
+
+- Include **benchmark comparison** (e.g., ASX 200 CAGR) to contextualize sector results.
+- Add **Sharpe Ratio** (CAGR / std deviation) to evaluate risk-adjusted return.
+- Incorporate **dividend-adjusted returns** if data becomes available.
+- Expand time window or introduce rolling CAGR for dynamic trend analysis.
+- Run regression models or clustering to segment “growth” vs “defensive” sectors based on patterns.
+
+--------------------------------------------------------
+📁 FILE OUTPUTS:
+
+- `combined_stock_data.csv`: Cleaned merged dataset (2010–2020)
+- `stock_returns.csv`: Stock-level performance with CAGR
+- `sector_performance.csv`: Aggregated sector metrics
+- `PowerBI_Dashboard.pbix`: Power BI report file
+- `Visual.pdf`: Exported PDF of dashboard visuals
+- `Documentation.txt`: This report
+
+--------------------------------------------------------
+👤 ANALYST PROFILE:
+
+- Emerging Data Analyst building portfolio for job readiness.
+- Focus: end-to-end data pipelines, financial performance metrics, and interactive dashboarding.
+- Goal: Demonstrate capabilities in data wrangling, storytelling, and tool fluency (Python + Power BI).
+
+--------------------------------------------------------
+✅ STATUS:
+
+✔ Data collected, cleaned, and analyzed  
+✔ Sector insights extracted  
+✔ Dashboard design near completion  
+🔲 Final step: Interactivity + visual polish + presentation prep
+
+--------------------------------------------------------
+
